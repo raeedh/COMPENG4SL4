@@ -1,3 +1,4 @@
+import enum
 import numpy as np
 import math
 from sklearn.preprocessing import StandardScaler
@@ -48,8 +49,8 @@ def calc_error(x, t, N, predictor):
 		cum_error += (t[i] - cum)**2
 	return cum_error / N
 
-# who knows
-def idk(X_train, X_valid, M):
+# Feature standardization
+def feature_standardization(X_train, X_valid, M):
 	XX_train = np.tile(X_train.reshape(-1,1),M)
 	XX_valid = np.tile(X_valid.reshape(-1,1),M)
 	for D in range(M):
@@ -60,44 +61,89 @@ def idk(X_train, X_valid, M):
 
 	return XX_train, XX_valid
 
+# Export data for plotting
+def export_data(x, t, filename):
+	f = open(filename, "w")
+	f.write("$x$\t$t$\n")
+
+	for n, val in enumerate(x):
+		f.write(str(val))
+		f.write("\t")
+		f.write(str(t[n]))
+		f.write("\n")
+	
+	f.close()
+
 def main():
 	# Generate the training and validation sets
+	# First argument is number of points in training set
+	# Second argument is number of points in validation set
+	# Third argument is seed for random number generator (use last 4 digits of student ID)
 	X_train, X_valid, t_train, t_valid = generate_data(10, 100, 8200)
+
+	# Export training and validation sets for plotting
+	export_data(X_train, t_train, "training_set.dat")
+	export_data(X_valid, t_valid, "validation_set.dat")
 
 	# Calculator predictors for all M for 0-9 (inclusive)
 	w = least_square_regression_M(X_train, t_train, 9)
 
-	# Generate predictors for M = 9 with regularization
-	lambdas = [math.exp(-10), math.exp(-15), math.exp(-16), math.exp(-17), math.exp(-18), math.exp(-19), math.exp(-20), math.exp(-21), math.exp(-22), math.exp(-23), math.exp(-24), math.exp(-25), math.exp(-30), math.exp(-40), math.exp(-50)]
-	w9_reg = []
-	for val in lambdas:
-		w9_reg.append(least_square_regression(X_train, t_train, 9, val))
+	# For each predictor, print coefficients
+	print("The predictors were determined and the coefficients for each M (in ascending powers) are:")
+	for i in range(10):
+		print("M = " + str(i) + ", " + str(w[i]))
+	print("\n")
 
 	# Calculate training error for all predictors for M = 0-9
 	training_error = []
 	for i in range(len(w)):
 		training_error.append(calc_error(X_train, t_train, 10, w[i]))
-	# print(training_error)
-	
+	print("The training error for all predictors was calculated:")
+	for i in range(10):
+		print("M = " + str(i) + ", " + str(training_error[i]))
+	print("The lowest training error occured when M = " + str(training_error.index(min(training_error))) + ".")
+	print("\n")
+
 	# Calculate validation error for all predictors for M = 0-9
 	validation_error = []
 	for i in range(len(w)):
 		validation_error.append(calc_error(X_valid, t_valid, 10, w[i]))
+	print("The validation error for all predictors was calculated:")
+	for i in range(10):
+		print("M = " + str(i) + ", " + str(validation_error[i]))
+	print("The lowest validation error occured when M = " + str(validation_error.index(min(validation_error))) + ".")
+	print("\n")
+
+	# Generate predictors for M = 9 with regularization for various lambda
+	lambdas = [math.exp(-5), math.exp(-6), math.exp(-7), math.exp(-8), math.exp(-9), math.exp(-10), math.exp(-11), math.exp(-12), math.exp(-13), math.exp(-14), math.exp(-15), math.exp(-16), math.exp(-17), math.exp(-18), math.exp(-19), math.exp(-20), math.exp(-21), math.exp(-22), math.exp(-23), math.exp(-24), math.exp(-25), math.exp(-30), math.exp(-40), math.exp(-50)]
+	w9_reg = []
+	for val in lambdas: # use additional argument λ for least_square_regression to enable regularization (default value is 0 if no argument passed in)
+		w9_reg.append(least_square_regression(X_train, t_train, 9, val))
+	print("Linear regression with regularization was done for various \u03BB for M = 9.")
+	print("\n")
 
 	# Calculate training error for all predictors for M = 9 with regularization
 	training_error_reg = []
 	for i in range(len(w9_reg)):
 		training_error_reg.append(calc_error(X_train, t_train, 10, w9_reg[i]))
-	# print(training_error_reg)
+	print("The training error for various \u03BB was calculated:")
+	for i in range(len(training_error_reg)):
+		print("ln \u03BB = " + str(math.log(lambdas[i])) + ", " + str(training_error_reg[i]))
+	print("The lowest training error with regularization is " + str(min(training_error_reg)) + " when ln \u03BB = " + str(math.log(lambdas[training_error_reg.index(min(training_error_reg))])) + ".")
+	print("\n")
 	
 	# Calculate validation error for all predictors for M = 9 with regularization
 	validation_error_reg = []
 	for i in range(len(w9_reg)):
 		validation_error_reg.append(calc_error(X_valid, t_valid, 10, w9_reg[i]))
-	# print(validation_error_reg)
+	print("The validation error for various \u03BB was calculated:")
+	for i in range(len(validation_error_reg)):
+		print("ln \u03BB = " + str(math.log(lambdas[i])) + ", " + str(validation_error_reg[i]))
+	print("The lowest validation error with regularization is " + str(min(validation_error_reg)) + " when ln \u03BB = " + str(math.log(lambdas[validation_error_reg.index(min(validation_error_reg))])) + ".")
 
-	XX_train, XX_valid = idk(X_train, X_valid, 9)
-	print(XX_train)
+	XX_train, XX_valid = feature_standardization(X_train, X_valid, 9)
+
+	print(".")
 
 if __name__ == '__main__':
 	main()
