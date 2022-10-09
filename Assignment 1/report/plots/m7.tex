@@ -1,0 +1,46 @@
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {$f_7(x)$},
+		width = \textwidth,
+		%height = 150,
+		xmin = -0.05, xmax = 1.05,
+		ymin = -2, ymax = 2,
+		ylabel = $t$, xlabel = $x$,
+		xticklabel style={
+		/pgf/number format/fixed,
+		/pgf/number format/precision=3
+		},
+		scaled x ticks=false,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	% \addplot file {./data/training_set.dat};
+	% \addplot table {./data/training_set.dat};
+	\addplot [only marks, mark=o, color=blue] table [y=$t$, x=$x$] {./data/training_set.dat};
+	\label{plot:m7_train}
+	\addlegendentry{Training Point}
+
+	\addplot [only marks, mark=o, color=black] table [y=$t$, x=$x$] {./data/validation_set.dat};
+	\label{plot:m7_valid}
+	\addlegendentry{Validation Point}
+
+	\addplot+[samples=100, domain=0:1,no marks, red, ultra thick]{sin(deg(4*pi*x))};
+	\label{plot:m7_ftrue}
+	\addlegendentry{$f_{true}(x)$}
+
+	\addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.08187756e-01 + -2.79901302e+00*x + 4.11094984e+02*x^2 + -3.51513917e+03*x^3 + 1.14419516e+04*x^4 + -1.76749271e+04*x^5 + 1.30636216e+04*x^6 + -3.72406252e+03*x^7};
+	\label{plot:m7_fm}
+	\addlegendentry{$f_7(x)$}
+	\end{axis}
+\end{tikzpicture}
+\caption{$f_M(x)$ for $M = 7$}
+\label{fig:m7}
+\end{figure}

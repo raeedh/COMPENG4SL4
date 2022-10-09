@@ -1,0 +1,52 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{./../figures/}}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat = newest}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{lstautogobble}
+%\usepackage[framed, numbered]{matlab-prettifier}
+\lstset{inputpath=../../code,frame=single,breaklines=true,numbers=left}
+
+\titleformat*{\section}{\large\bfseries}
+%\allowdisplaybreaks
+
+% remove vertical spacing above top figure
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+%
+
+\title{COMPENG 4SL4 Assignment 1 Report}
+\author{
+    Raeed Hassan \\
+    hassam41 \\
+    %L02
+}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\input{plots/m0.tex}
+\input{plots/m1.tex}
+\input{plots/m2.tex}
+\input{plots/m3.tex}
+\input{plots/m4.tex}
+\input{plots/m5.tex}
+\input{plots/m6.tex}
+\input{plots/m7.tex}
+\input{plots/m8.tex}
+\input{plots/m9.tex}
+\input{plots/m9_reg.tex}
+
+\end{document}
