@@ -29,6 +29,7 @@
 \author{
     Raeed Hassan \\
     hassam41 \\
+    400188200
     %L02
 }
 
@@ -37,6 +38,103 @@
 \maketitle
 \clearpage
 
+\section*{Linear Regression Modelling with Least Squares}
+Ten linear regression models of increasing capacity were trained for a training set of the relation
+\begin{equation}
+    t = \underbrace{\sin(4 \pi x)}_{f_{true}(x)} + \epsilon
+    \label{eq:1}
+\end{equation}
+where $\epsilon$ random noise with a Gaussian distribution with 0 mean and variance 0.09. The training set was constructed with 10 examples \{${(x^{(1)},t^{(1)}),\dots(x^{(10)},t^{(10)})}$\}, uniformly spaced in the internal [0,1], and the validation was similar constructed with 100 examples. The targets for each set were generated according to relation (\ref{eq:1}). The seed for the random numbers for the noise was formed with the last 4 digits of my student ID (8200).
+
+Ten predictors for M from 0 to 9 were found using least squares, with the predictor coefficients founding using the relation
+\begin{equation}
+    \text{w} = (\text{X}^T \text{X})^{-1} \text{X}^T \text{t}
+    \label{eq:2}
+\end{equation}
+where X is the Vandermonde matrix of $x$. The predictor functions derived through the least squares method are shown in Table~\ref{tab:predictors}. The plot of each predictor function is shown in Figures \ref{fig:m0}--\ref{fig:m9}. We can observe that as $M$ increases, the predictor $f_M(x)$ becomes better at fitting the training points in the training set, and begins to resemble a $\sin$ function, but at $M = 9$ we can see that the predictor begins to overfit to the training data.
+
+The training and validation errors for each predictor is shown in Table~\ref{tab:errors}. As expected, as we increase $M$ the training error decreases, however we can see that $M = 9$ the validation error begins to increase despite having the lowest training error, due to the overfitting discussed earlier. If we were to select a predictor function based on this data, we would select $M = 7$ as our predictor function as this predictor produces the lowest validation error when compared to our validation set.  
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    $M$ &
+      Predictor Function \\ \hline
+    0 &
+      -0.01033359 \\ \hline
+    1 &
+      0.43409653 - 0.88886025$x$ \\ \hline
+    2 &
+      0.45604542 - 1.03701525$x$ + 0.148155$x^2$ \\ \hline
+    3 &
+      0.48031649 - 1.43662107$x$ + 1.20134604$x^2$ - 0.70212736$x^3$ \\ \hline
+    4 &
+      0.22706564 + 8.06028578$x$ - 46.75803356$x^2$ + 76.22281814$x^3$- 38.46247275$x^4$ \\ \hline
+    5 &
+      \begin{tabular}[c]{@{}c@{}}1.52971950e-1 + 4.26817105e1$x$ - 3.35349081e2$x^2$ + 8.91973513e2$x^3$\\ - 9.73497467e2$x^4$ + 3.74013998e2$x^5$\end{tabular} \\ \hline
+    6 &
+      \begin{tabular}[c]{@{}c@{}}-1.49350573e-1 + 4.17153461e1$x$ - 3.23426783e2$x^2$ + 8.40658825e2$x^3$\\ - 8.74333070e2$x^4$ + 2.85805534e2$x^5$ + 2.94028210e1$x^6$\end{tabular} \\ \hline
+    7 &
+      \begin{tabular}[c]{@{}c@{}}-1.08187756e-1 - 2.79901302e0$x$ + 4.11094984e2$x^2$ - 3.51513917e3$x^3$\\ + 1.14419516e4$x^4$ - 1.76749271e4$x^5$ + 1.30636216e4$x^6$ - 3.72406252e3$x^7$\end{tabular} \\ \hline
+    8 &
+      \begin{tabular}[c]{@{}c@{}}-1.11244799e-1 + 1.90768110e1$x$ - 3.00623774e1$x^2$ - 1.87674593e2$x^3$\\ - 1.11072465e3$x^4$ + 8.45853799e3$x^5$ - 1.74254206e4$x^6$ + 1.49426978e4$x^7$\\ - 4.66669003e3$x^8$\end{tabular} \\ \hline
+    9 &
+      \begin{tabular}[c]{@{}c@{}}-1.1254719035468952e-1 + 1.3331309735774994e2$x$ - 2.6686857490539551e3$x^2$\\ + 2.3579426277160645e4$x^3$ - 1.1276578366088867e5$x^4$ + 3.1264942968750000e5$x^5$\\ - 5.1552117065429688e5$x^6$ + 4.9806604736328125e5$x^7$ - 2.6027476269531250e5$x^8$\\ + 5.6801928695678711e4$x^9$\end{tabular} \\ \hline
+    \end{tabular}
+\caption{Predictor Functions for $M =$ 0--9}
+\label{tab:predictors}
+\end{table}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    M & Training Error       & Validation Error    \\ \hline
+    0 & 0.5201122363344061   & 0.6110146395929855 \\ \hline
+    1 & 0.43964188447651165  & 0.535424084259008  \\ \hline
+    2 & 0.4394652414421542   & 0.536733362125242  \\ \hline
+    3 & 0.4391787138011748   & 0.5319587930886094  \\ \hline
+    4 & 0.3825648436890513   & 0.595438430761644 \\ \hline
+    5 & 0.06963627001271834  & 0.2660364124955042  \\ \hline
+    6 & 0.06954009795213771  & 0.26695432746209075  \\ \hline
+    7 & 0.008517383401040548 & 0.16060941834056727  \\ \hline
+    8 & 0.005845212432320224 & 0.17961847258518052 \\ \hline
+    9 & 5.197575747112509e-8 & 0.4183415258492314   \\ \hline
+    \end{tabular}
+\caption{Training and Validation Errors for $M =$ 0--9}
+\label{tab:errors}
+\end{table}
+\clearpage
+
+\section*{Linear Regression Modelling with Regularization}
+To control the overfitting seen in $M = 9$, we will train the model with regularization. This allows to limit overfitting in the model, but we must also make sure we select values for $\lambda$ to produce the best results and also to avoid underfitting. The model was trained with several values of $\lambda$ to determine the best fit, ranging from $e^{-50}$ to 1. 
+
+The training and validation errors for these values of $\lambda$ are shown in Table~\ref{tab:reg_errors}. To eliminate overfitting, we select the value of $\lambda$ that produces the lowest validation error, $\lambda_1$, which is found to be $e^{-25}$ where $\ln \lambda_1 = -25$. A plot of the predictor function for $\lambda_1$ can be found in Figure~\ref{fig:m9_l1}. We also select $\ln \lambda_2 = 0$ or $\lambda_2 = 1$ to demonstrate that values of $\lambda$ that are too high can lead to underfitting.
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    $\ln \lambda$ & Training Error       & Validation Error    \\ \hline
+    0             & 0.5630718561051139   & 0.6513961458453568  \\ \hline
+    -5            & 0.4866095450868606   & 0.57564785030175 \\ \hline
+    -10           & 0.8730640240006535   & 1.0322392754481602  \\ \hline
+    -15           & 0.239989434383105    & 0.4122650499965516  \\ \hline
+    -20           & 0.04611112257732629  & 0.21396326035682034 \\ \hline
+    -25           & 0.00681937450789687  & 0.17768961157179558 \\ \hline
+    -30           & 0.017055602801581055 & 0.23379480397505514  \\ \hline
+    -40           & 3.008108918763905e-6 & 0.41834448198239266  \\ \hline
+    -50           & 5.210996570901634e-8 & 0.41834152598343965   \\ \hline
+    \end{tabular}
+\caption{Training and Validation Errors for Various $\lambda$}
+\label{tab:reg_errors}
+\end{table}
+
+\section*{Training and Validation Errors}
+The average error between the validation set and $f_{true}(x)$ was calculated and determined to be $0.0.23043795821629443$. A plot of the training and validation errors versus $M$ is shown in Figure~\ref{fig:errors}. For $M = 9$, the errors for the model with no regularization and for regularization with $\lambda_1$ and $\lambda_2$ are shown. The average error between the validation set and $f_{true}(x)$ is also plotted on this graph.
+
+\clearpage
 \input{plots/m0.tex}
 \input{plots/m1.tex}
 \input{plots/m2.tex}
@@ -47,6 +145,8 @@
 \input{plots/m7.tex}
 \input{plots/m8.tex}
 \input{plots/m9.tex}
-\input{plots/m9_reg.tex}
+\input{plots/m9_reg1.tex}
+\input{plots/m9_reg2.tex}
+\input{plots/errors.tex}
 
 \end{document}

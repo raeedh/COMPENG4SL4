@@ -1,0 +1,43 @@
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Training and Validation Errors vs. $M$},
+		width = \textwidth,
+		%height = 150,
+		xmin = -0.5, xmax = 9.5,
+		ymin = 0, ymax = 0.75,
+		ylabel = Error, xlabel = $M$,
+		xticklabel style={
+		/pgf/number format/fixed,
+		/pgf/number format/precision=3
+		},
+		scaled x ticks=false,
+		legend pos = north west,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	% \addplot file {./data/training_set.dat};
+	% \addplot table {./data/training_set.dat};
+	\addplot [only marks, mark=o, color=blue] table [y=training_error, x=$M$] {./data/predictor_errors.dat};
+	\label{plot:train_error}
+	\addlegendentry{Training Error}
+
+	\addplot [only marks, mark=o, color=red] table [y=validation_error, x=$M$] {./data/predictor_errors.dat};
+	\label{plot:valid_error}
+	\addlegendentry{Validation Error}
+
+	\addplot+[samples=100, domain=0:9,no marks, green, ultra thick]{0.23043795821629443};
+	\label{plot:avg_true_error}
+	\addlegendentry{Average error between validation targets and $f_{true}$}
+	\end{axis}
+\end{tikzpicture}
+\caption{Training and Validation Errors vs. $M$}
+\label{fig:errors}
+\end{figure}

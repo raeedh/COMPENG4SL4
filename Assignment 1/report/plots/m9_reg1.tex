@@ -2,7 +2,7 @@
 \centering
 \begin{tikzpicture}
 	\begin{axis}[
-		title = {$f_9(x)$ with Regularization},
+		title = {$f_9(x)$ with Regularization using $\lambda_1$},
 		width = \textwidth,
 		%height = 150,
 		xmin = -0.05, xmax = 1.05,
@@ -40,13 +40,17 @@
 	% \label{plot:m9_6}
 	% \addlegendentry{$\ln \lambda = -6$}
 
-	\addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{0.18863556 + -0.18268911*x + -0.13442439*x^2 + -0.0895358*x^3 + -0.07212156*x^4 + -0.06325226*x^5 + -0.05426666*x^6 + -0.04316362*x^7 + -0.03032503*x^8 + -0.016649*x^9};
-	\label{plot:m9_0}
-	\addlegendentry{$\ln \lambda = 0$}
+	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{0.18863556 + -0.18268911*x + -0.13442439*x^2 + -0.0895358*x^3 + -0.07212156*x^4 + -0.06325226*x^5 + -0.05426666*x^6 + -0.04316362*x^7 + -0.03032503*x^8 + -0.016649*x^9};
+	% \label{plot:m9_0}
+	% \addlegendentry{$\ln \lambda = 0$}
 
-	\addplot+[samples=100, domain=0:1,no marks, yellow, ultra thick]{-1.10994567e-01 + 1.43724283e+01*x + 7.25141951e+01*x^2 + -1.04934294e+03*x^3 + 2.63799991e+03*x^4 + -9.66422955e+02*x^5 + -3.19883049e+03*x^6 + 2.21549361e+03*x^7 + 1.55419526e+03*x^8 + -1.28023866e+03*x^9};
+	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.10994567e-01 + 1.43724283e+01*x + 7.25141951e+01*x^2 + -1.04934294e+03*x^3 + 2.63799991e+03*x^4 + -9.66422955e+02*x^5 + -3.19883049e+03*x^6 + 2.21549361e+03*x^7 + 1.55419526e+03*x^8 + -1.28023866e+03*x^9};
+	% \label{plot:m9_24}
+	% \addlegendentry{$\ln \lambda_1 = -24$}
+
+	\addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.10852659e-01 + 1.46045994e+01*x + 6.59181232e+01*x^2 + -9.79198337e+02*x^3 + 2.26283296e+03*x^4 + 1.64283808e+02*x^5 + -5.20291229e+03*x^6 + 4.28530896e+03*x^7 + 4.02561443e+02*x^8 - 1.01365907e+03*x^9};
 	\label{plot:m9_24}
-	\addlegendentry{$\ln \lambda = -24$}
+	\addlegendentry{$\ln \lambda_1 = -25$}
 
 	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.38314154e-01 + 2.68618371e+01*x + -9.89595355e+01*x^2 + -2.70553885e+02*x^3 + 1.30342565e+03*x^4 + -8.16345587e+02*x^5 + -1.21592839e+03*x^6 + 4.98051616e+02*x^7 + 1.52015081e+03*x^8 + -9.46926840e+02*x^9};
 	% \label{plot:m9_18}
@@ -57,6 +61,6 @@
 	% \addlegendentry{$\ln \lambda = -10$}
 	\end{axis}
 \end{tikzpicture}
-\caption{$f_M(x)$ for $M = 9$ and $\ln \lambda = 0, -24$}
-\label{fig:m9}
+\caption{$f_M(x)$ for $M = 9$ and $\ln \lambda_1 = -25$}
+\label{fig:m9_l1}
 \end{figure}

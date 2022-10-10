@@ -13,6 +13,13 @@ def generate_data(training_size, valiation_size, random_seed):
 	# Return training and validation sets
 	return X_train, X_valid, t_train, t_valid
 
+# Calculate average error between targets and true function f_true(x)
+def avg_true_error(x, t):
+	cum = 0
+	for n, val in enumerate(x):
+		cum += abs(math.sin(4*math.pi*val) - t[n])
+	return cum / len(x)
+
 # Calculate least squares regression
 # Returns coefficients of predictor in ndarray
 def least_square_regression(x, t, M, regularization_lambda=0):
@@ -39,23 +46,23 @@ def least_square_regression_M(x, t, M):
 
 # Calculate training/validation error
 # x/t = training/validationg set, N = number of elements, predictor = coefficients of predictor in numpy.ndarray
-def calc_error(x, t, N, predictor):
+def calc_error(x, t, predictor):
 	cum_error = 0
-	for i in range(N):
+	for i in range(len(x)):
 		cum = 0
 		for n, d in enumerate(predictor):
 			cum += d*x[i]**n
 		cum_error += (t[i] - cum)**2
-	return cum_error / N
+	return cum_error / len(x)
 
-def calc_error_regularization(x, t, N, lmbda, predictor):
+def calc_error_regularization(x, t, lmbda, predictor):
 	cum_error = 0
-	for i in range(N):
+	for i in range(len(x)):
 		cum = 0
 		for n, d in enumerate(predictor):
 			cum += d*x[i]**n
 		cum_error += (t[i] - cum)**2
-	regularized_cost = cum_error / N
+	regularized_cost = cum_error / len(x)
 	for val in predictor:
 		regularized_cost += lmbda*(val**2)
 	return regularized_cost 
@@ -90,7 +97,13 @@ def main():
 	# First argument is number of points in training set
 	# Second argument is number of points in validation set
 	# Third argument is seed for random number generator (use last 4 digits of student ID)
+	print("Generated training and validation sets of size 10 and 100 with random number generator seed 8200.\n")
 	X_train, X_valid, t_train, t_valid = generate_data(10, 100, 8200)
+
+	# Calculate average error between validation targets and true function f_true(x)
+	print("Calculated average error between validation targets and true function ftrue(x):")
+	print(avg_true_error(X_valid, t_valid))
+	print("\n")
 
 	# Export training and validation sets for plotting
 	export_data(X_train, t_train, "training_set.dat")
@@ -108,7 +121,7 @@ def main():
 	# Calculate training error for all predictors for M = 0-9
 	training_error = []
 	for i in range(len(w)):
-		training_error.append(calc_error(X_train, t_train, 10, w[i]))
+		training_error.append(calc_error(X_train, t_train, w[i]))
 	# Print results
 	print("The training error for all predictors was calculated:")
 	for i in range(10):
@@ -119,7 +132,7 @@ def main():
 	# Calculate validation error for all predictors for M = 0-9
 	validation_error = []
 	for i in range(len(w)):
-		validation_error.append(calc_error(X_valid, t_valid, 10, w[i]))
+		validation_error.append(calc_error(X_valid, t_valid, w[i]))
 	# Print results
 	print("The validation error for all predictors was calculated:")
 	for i in range(10):
@@ -138,7 +151,7 @@ def main():
 	# Calculate training error for all predictors for M = 9 with regularization
 	training_error_reg = []
 	for i in range(len(w9_reg)):
-		training_error_reg.append(calc_error_regularization(X_train, t_train, 10, lambdas[i], w9_reg[i]))
+		training_error_reg.append(calc_error_regularization(X_train, t_train, lambdas[i], w9_reg[i]))
 	# Print results
 	print("The training error for various \u03BB was calculated:")
 	for i in range(len(training_error_reg)):
@@ -149,7 +162,7 @@ def main():
 	# Calculate validation error for all predictors for M = 9 with regularization
 	validation_error_reg = []
 	for i in range(len(w9_reg)):
-		validation_error_reg.append(calc_error_regularization(X_valid, t_valid, 10, lambdas[i], w9_reg[i]))
+		validation_error_reg.append(calc_error_regularization(X_valid, t_valid, lambdas[i], w9_reg[i]))
 	# Print results
 	print("The validation error for various \u03BB was calculated:")
 	for i in range(len(validation_error_reg)):
@@ -159,8 +172,8 @@ def main():
 	print(w9_reg[validation_error_reg.index(min(validation_error_reg))])
 	print("\n")
 
-	print("We observe we reduce overfitting when \u03BB is between -10 and -25, an example is when ln \u03BB = -24 (the lowest validation error), for which the predictor coefficients are:")
-	print(w9_reg[lambdas.index(math.exp(-24))])
+	print("We observe we reduce overfitting when \u03BB is between -10 and -25, an example is when ln \u03BB = -25 (the lowest validation error), for which the predictor coefficients are:")
+	print(w9_reg[lambdas.index(math.exp(-25))])
 
 	print("We observe the plot is underfitted when \u03BB is too high, an example is when ln \u03BB = 0, for which the predictor coefficients are:")
 	print(w9_reg[lambdas.index(math.exp(0))])
