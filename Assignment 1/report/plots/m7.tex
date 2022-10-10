@@ -22,8 +22,6 @@
 		%{\pgfkeysvalueof{/data point/y}})$%
 		%},
 	]
-	% \addplot file {./data/training_set.dat};
-	% \addplot table {./data/training_set.dat};
 	\addplot [only marks, mark=o, color=blue] table [y=$t$, x=$x$] {./data/training_set.dat};
 	\label{plot:m7_train}
 	\addlegendentry{Training Point}

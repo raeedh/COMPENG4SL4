@@ -24,7 +24,7 @@ def avg_true_error(x, t):
 # Returns coefficients of predictor in ndarray
 def least_square_regression(x, t, M, regularization_lambda=0):
 	X = np.tile(x.reshape(-1,1),M+1)
-	B = np.diag(regularization_lambda*np.ones(M+1))
+	B = np.diag(len(x)*regularization_lambda*np.ones(M+1))
 	for D in range(M+1):
 		X[:,D] = X[:,D]**D
 	return np.matmul(np.linalg.inv(np.add(np.matmul(X.T, X),B)),np.matmul(X.T,t.T))
@@ -141,7 +141,7 @@ def main():
 	print("\n")
 
 	# Generate predictors for M = 9 with regularization for various lambda
-	lambdas = [math.exp(0), math.exp(-1), math.exp(-2), math.exp(-3), math.exp(-4), math.exp(-5), math.exp(-6), math.exp(-7), math.exp(-8), math.exp(-9), math.exp(-10), math.exp(-11), math.exp(-12), math.exp(-13), math.exp(-14), math.exp(-15), math.exp(-16), math.exp(-17), math.exp(-18), math.exp(-19), math.exp(-20), math.exp(-21), math.exp(-22), math.exp(-23), math.exp(-24), math.exp(-25), math.exp(-30), math.exp(-40), math.exp(-50)]
+	lambdas = [math.exp(0), math.exp(-1), math.exp(-2), math.exp(-3), math.exp(-4), math.exp(-5), math.exp(-6), math.exp(-7), math.exp(-8), math.exp(-9), math.exp(-10), math.exp(-11), math.exp(-12), math.exp(-13), math.exp(-14), math.exp(-15), math.exp(-16), math.exp(-17), math.exp(-18), math.exp(-19), math.exp(-20), math.exp(-21), math.exp(-22), math.exp(-23), math.exp(-24), math.exp(-25), math.exp(-30), math.exp(-31), math.exp(-32), math.exp(-33), math.exp(-34), math.exp(-35), math.exp(-40), math.exp(-50)]
 	w9_reg = []
 	for val in lambdas: # use additional argument λ for least_square_regression to enable regularization (default value is 0 if no argument passed in)
 		w9_reg.append(least_square_regression(X_train, t_train, 9, val))
@@ -172,8 +172,8 @@ def main():
 	print(w9_reg[validation_error_reg.index(min(validation_error_reg))])
 	print("\n")
 
-	print("We observe we reduce overfitting when \u03BB is between -10 and -25, an example is when ln \u03BB = -25 (the lowest validation error), for which the predictor coefficients are:")
-	print(w9_reg[lambdas.index(math.exp(-25))])
+	print("We observe we reduce overfitting and the plot begins to resemble the true function when \u03BB is between -10 and -35, an example is when ln \u03BB = -30 (the lowest validation error), for which the predictor coefficients are:")
+	print(w9_reg[lambdas.index(math.exp(-30))])
 
 	print("We observe the plot is underfitted when \u03BB is too high, an example is when ln \u03BB = 0, for which the predictor coefficients are:")
 	print(w9_reg[lambdas.index(math.exp(0))])

@@ -6,7 +6,7 @@
 		width = \textwidth,
 		%height = 150,
 		xmin = -0.05, xmax = 1.05,
-		ymin = -2, ymax = 2.5,
+		ymin = -2, ymax = 2,
 		ylabel = $t$, xlabel = $x$,
 		xticklabel style={
 		/pgf/number format/fixed,
@@ -22,8 +22,6 @@
 		%{\pgfkeysvalueof{/data point/y}})$%
 		%},
 	]
-	% \addplot file {./data/training_set.dat};
-	% \addplot table {./data/training_set.dat};
 	\addplot [only marks, mark=o, color=blue] table [y=$t$, x=$x$] {./data/training_set.dat};
 	\label{plot:m9_train}
 	\addlegendentry{Training Point}
@@ -36,25 +34,9 @@
 	\label{plot:m9_ftrue}
 	\addlegendentry{$f_{true}(x)$}
 
-	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{0.51398183 + -1.58530559*x + -0.56083778*x^2 + 3.43641374*x^3 + 1.11676309*x^4 + -1.76603722*x^5 + -2.89278661*x^6 + -2.09161309*x^7 + 0.13287417*x^8 + 3.2136586*x^9};
-	% \label{plot:m9_6}
-	% \addlegendentry{$\ln \lambda = -6$}
-
-	\addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{0.18863556 + -0.18268911*x + -0.13442439*x^2 + -0.0895358*x^3 + -0.07212156*x^4 + -0.06325226*x^5 + -0.05426666*x^6 + -0.04316362*x^7 + -0.03032503*x^8 + -0.016649*x^9};
+	\addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{0.03748447 + -0.04389241*x + -0.04437676*x^2 + -0.04028041*x^3 + -0.03774903*x^4 + -0.03581972*x^5 + -0.0338947*x^6 + -0.03185185*x^7 + -0.02974561*x^8 + -0.027661259*x^9};
 	\label{plot:m9_0}
 	\addlegendentry{$\ln \lambda_2 = 0$}
-
-	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.10994567e-01 + 1.43724283e+01*x + 7.25141951e+01*x^2 + -1.04934294e+03*x^3 + 2.63799991e+03*x^4 + -9.66422955e+02*x^5 + -3.19883049e+03*x^6 + 2.21549361e+03*x^7 + 1.55419526e+03*x^8 + -1.28023866e+03*x^9};
-	% \label{plot:m9_24}
-	% \addlegendentry{$\ln \lambda_1 = -24$}
-
-	% \addplot+[samples=100, domain=0:1,no marks, green, ultra thick]{-1.38314154e-01 + 2.68618371e+01*x + -9.89595355e+01*x^2 + -2.70553885e+02*x^3 + 1.30342565e+03*x^4 + -8.16345587e+02*x^5 + -1.21592839e+03*x^6 + 4.98051616e+02*x^7 + 1.52015081e+03*x^8 + -9.46926840e+02*x^9};
-	% \label{plot:m9_18}
-	% \addlegendentry{$\ln \lambda = -18$}
-
-	% \addplot+[samples=100, domain=0:1,no marks, yellow, ultra thick]{0.27698878 + 9.80787512*x + -59.07929135*x^2 + 70.22345332*x^3 + 33.22535593*x^4 + -23.514007*x^5 + -44.6955094*x^6 + -31.02611609*x^7 + 2.42735903*x^8 + 41.98878891*x^9};
-	% \label{plot:m9_10}
-	% \addlegendentry{$\ln \lambda = -10$}
 	\end{axis}
 \end{tikzpicture}
 \caption{$f_M(x)$ for $M = 9$ and $\ln \lambda_2 = 0$}

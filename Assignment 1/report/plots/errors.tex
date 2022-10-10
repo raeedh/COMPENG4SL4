@@ -23,8 +23,6 @@
 		%{\pgfkeysvalueof{/data point/y}})$%
 		%},
 	]
-	% \addplot file {./data/training_set.dat};
-	% \addplot table {./data/training_set.dat};
 	\addplot [only marks, mark=o, color=blue] table [y=training_error, x=$M$] {./data/predictor_errors.dat};
 	\label{plot:train_error}
 	\addlegendentry{Training Error}

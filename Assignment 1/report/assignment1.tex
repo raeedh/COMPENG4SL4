@@ -120,16 +120,17 @@ The training and validation errors for these values of $\lambda$ are shown in Ta
     \centering
     \begin{tabular}{|l|l|l|}
     \hline
-    $\ln \lambda$ & Training Error       & Validation Error    \\ \hline
-    0             & 0.5630718561051139   & 0.6513961458453568  \\ \hline
-    -5            & 0.4866095450868606   & 0.57564785030175 \\ \hline
-    -10           & 0.8730640240006535   & 1.0322392754481602  \\ \hline
-    -15           & 0.239989434383105    & 0.4122650499965516  \\ \hline
-    -20           & 0.04611112257732629  & 0.21396326035682034 \\ \hline
-    -25           & 0.00681937450789687  & 0.17768961157179558 \\ \hline
-    -30           & 0.017055602801581055 & 0.23379480397505514  \\ \hline
-    -40           & 3.008108918763905e-6 & 0.41834448198239266  \\ \hline
-    -50           & 5.210996570901634e-8 & 0.41834152598343965   \\ \hline
+    $\ln \lambda$ & Training Error        & Validation Error    \\ \hline
+    0             & 0.4946484481253838    & 0.5903023342805958  \\ \hline
+    -5            & 0.4441266042860146    & 0.5364565120696182  \\ \hline
+    -10           & 0.39371708802503913   & 0.4723287965431401  \\ \hline
+    -15           & 0.13459126687109363   & 0.33767904690001294 \\ \hline
+    -20           & 0.029576140599540363  & 0.18755627395385036 \\ \hline
+    -25           & 0.00649576749718636   & 0.178425962910108   \\ \hline
+    -30           & 0.00563542969939257   & 0.17435406796780803 \\ \hline
+    -35           & 0.0004110693441929278 & 0.3849088620133708  \\ \hline
+    -40           & 3.008108918763905e-6  & 0.41834448198239266 \\ \hline
+    -50           & 5.210996570901634e-8  & 0.41834152598343965 \\ \hline
     \end{tabular}
 \caption{Training and Validation Errors for Various $\lambda$}
 \label{tab:reg_errors}
@@ -138,7 +139,10 @@ The training and validation errors for these values of $\lambda$ are shown in Ta
 \section*{Training and Validation Errors}
 The average error between the validation set and $f_{true}(x)$ was calculated and determined to be $0.0.23043795821629443$. A plot of the training and validation errors versus $M$ is shown in Figure~\ref{fig:errors}. For $M = 9$, the errors for the model with no regularization and for regularization with $\lambda_1$ and $\lambda_2$ are shown. The average error between the validation set and $f_{true}(x)$ is also plotted on this graph.
 
-\clearpage
+\section*{Feature Standardization}
+Due to time constraints, feature standardization was not performed before regression with regularization (however the function to perform feature standardization is implemented in the code). If it was implemented, when performing regression with regularization, X in relation (\ref{eq:3}) becomes \texttt{XX\_train} with a column of ones at the start, instead of the Vandermonde matrix for $x$. A new function would need to be implemented similar to \texttt{least\_square\_regression} in \texttt{assignment1.py} where \texttt{XX\_train} is an argument instead of $x$, and \texttt{XX\_train} replaces X in all operations.
+
+% \clearpage
 \input{plots/m0.tex}
 \input{plots/m1.tex}
 \input{plots/m2.tex}
