@@ -108,7 +108,11 @@ The training and validation errors for each predictor is shown in Table~\ref{tab
 \clearpage
 
 \section*{Linear Regression Modelling with Regularization}
-To control the overfitting seen in $M = 9$, we will train the model with regularization. This allows to limit overfitting in the model, but we must also make sure we select values for $\lambda$ to produce the best results and also to avoid underfitting. The model was trained with several values of $\lambda$ to determine the best fit, ranging from $e^{-50}$ to 1. 
+To control the overfitting seen in $M = 9$, we will train the model with regularization. This allows to limit overfitting in the model, but we must also make sure we select values for $\lambda$ to produce the best results and also to avoid underfitting. The model was trained with several values of $\lambda$ to determine the best fit, ranging from $e^{-50}$ to 1. The coefficients for the regularized predictors was calculated with this relation:
+\begin{equation}
+    \text{w} = (\text{X}^T \text{X} + \frac{N}{2}\text{B})^{-1} \text{X}^T \text{t}
+    \label{eq:3}
+\end{equation}
 
 The training and validation errors for these values of $\lambda$ are shown in Table~\ref{tab:reg_errors}. To eliminate overfitting, we select the value of $\lambda$ that produces the lowest validation error, $\lambda_1$, which is found to be $e^{-25}$ where $\ln \lambda_1 = -25$. A plot of the predictor function for $\lambda_1$ can be found in Figure~\ref{fig:m9_l1}. We also select $\ln \lambda_2 = 0$ or $\lambda_2 = 1$ to demonstrate that values of $\lambda$ that are too high can lead to underfitting.
 
