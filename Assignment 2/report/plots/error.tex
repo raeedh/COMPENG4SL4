@@ -1,0 +1,46 @@
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Cross-Validation and Test Errors vs. $k$},
+		width = \textwidth,
+		%height = 150,
+		xmin = 0.5, xmax = 13.5,
+		ymin = 0, ymax = 50,
+		ylabel = Error, xlabel = $k$,
+		xticklabel style={
+		/pgf/number format/fixed,
+		/pgf/number format/precision=3
+		},
+		scaled x ticks=false,
+		legend pos = north east,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	\addplot [only marks, mark=o, color=blue] table [y=no_basis_cross, x=$k$] {./data/error.dat};
+	\label{plot:no_basis_cross}
+	\addlegendentry{Cross-Validation Error with no Basis Expansion}
+
+	\addplot [only marks, mark=o, color=red] table [y=no_basis_test, x=$k$] {./data/error.dat};
+	\label{plot:no_basis_test}
+	\addlegendentry{Test Error with no Basis Expansion}
+
+	\addplot [only marks, mark=x, color=green] table [y=basis_cross, x=$k$] {./data/error.dat};
+	\label{plot:basis_cross}
+	\addlegendentry{Cross-Validation Error with Basis Expansion}
+
+	\addplot [only marks, mark=x, color=black] table [y=basis_test, x=$k$] {./data/error.dat};
+	\label{plot:basis_test}
+	\addlegendentry{Test Error with Basis Expansion}
+
+	\end{axis}
+\end{tikzpicture}
+\caption{Cross-Validation and Test Errors vs. $k$}
+\label{fig:error}
+\end{figure}
