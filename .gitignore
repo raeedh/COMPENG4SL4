@@ -1,3 +1,5 @@
+*:Zone.Identifier
+
 # latex auxiliary files
 *.aux
 *.fdb_latexmk
