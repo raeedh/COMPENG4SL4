@@ -89,6 +89,10 @@ def kneighbour_kfold(X_train, y_train, kf_train, kf_test):
 	return err.index(min(err)) + 1
 
 def kneighbour_pred(X_test, X_train, y_train, k):
+	"""
+	Predict k-neighbour neighbours
+	"""
+
 	dist, pred = [], []
 	for r in range(len(X_test)):
 		dist.append(np.linalg.norm(X_train - X_test[r], axis=1))
@@ -237,5 +241,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-		
