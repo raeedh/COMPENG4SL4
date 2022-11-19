@@ -26,6 +26,22 @@ def load_data(train_split, split_seed):
 
 	return X_train, X_test, y_train, y_test
 
+def batch_gradient_logreg(x, t, seed, alpha = 0.001, iterations = 100000):
+	"""
+	x = x data from set
+	y = target data from set
+	initial_w = initial conditions for predictor, w^(0)
+
+	Returns coefficients of predictor in ndarray
+	"""
+	w = np.random.random(x.shape[1])
+
+	for i in range(iterations):
+		y = 1 / (1 + np.exp(-(x @ w)))
+		w = w - (alpha/len(t))*(x.T @ (y - t))
+	# print(w)
+	return w
+
 def kneighbour_kfold(X_train, y_train, kf_train, kf_test):
 	"""
 	Perform K-Fold Cross-Validation with k-neighbour classifier
@@ -116,13 +132,12 @@ def kneighbour_kfold_scikit(X_train, y_train, kf_train, kf_test):
 
 	return total.index(min(total)) + 1
 
-def sklearn_logreg():
-	print("test")
-
 def main():
 	# Load Wisconsin breast cancer data, perform feature standarization  and split into 80-20 training-test sets
 	# Use 8200 (last 4 digits of student ID for random seed)
 	X_train, X_test, y_train, y_test = load_data(0.8, 8200)
+	print("The Wisconsin breast cancer data set and split to 80-20 training-test sets using a seed of 8200")
+	print("")
 
 	# Get indeces for K-fold Cross-validation for later use
 	kf = KFold(n_splits = 5)
@@ -136,25 +151,38 @@ def main():
 	# Create threshold list for logistic regression
 	threshold = list(np.arange(0.05,1,0.05))
 
+	# Implement logistic regression
+	w = batch_gradient_logreg(X_train, y_train, 8200)
+	print("\nLogistic Regression is implemented")
+	y_prob = 1 / (1 + np.exp(-(X_test @ w)))
+	y_prob = 1 - np.array(y_prob)
+	for i in threshold:
+		y_targ = 1 * (y_prob < 1 - i)
+		y_targ_inv = np.where(y_targ | 1, y_targ^1, y_targ)
+		y_test_inv = np.where(y_test | 1, y_test^1, y_test)
+		logreg_p = sum(y_targ_inv * y_test_inv) / len(np.where(y_targ_inv == 0)[0])
+		logreg_r = sum(y_targ_inv * y_test_inv)  / len(np.where(y_test == 0)[0])
+		logreg_f1 = (2 * logreg_p * logreg_r) / (logreg_p + logreg_r)
+		print("The precision, recall, and F1 score when the threshold is", i, "were calculated to be:")
+		print("precision: ", logreg_p)
+		print("recall: ", logreg_r)
+		print("f1 score: ", logreg_f1)
+		logreg_misclass = np.bitwise_xor(y_targ, y_test)
+		print("The test error (misclassification rate) is:", sum(logreg_misclass) / len(y_test))
+		# print(sklearn_logreg_prob)
+		print("")
+
 	# Implementation of logistic regression provided in scikit-learn
 	# Create LogisticRegression object and fit to training data
 	print("\nLogistic Regression is implemented using the implementation provided in scikit-learn")
 	clf = LogisticRegression().fit(X_train, y_train)
 	# Predict using logistic regression model on test set
 	sklearn_logreg_targets = clf.predict(X_test)
-	print(sklearn_logreg_targets)
 	sklearn_logreg_prob = clf.predict_proba(X_test)
-	# print(sklearn_logreg_prob)
-	# print(sklearn_logreg_prob[:, 1])
-	# Calculate precision, recall and F1 score
 	for i in threshold:
 		sklearn_logreg_targets = 1 * (sklearn_logreg_prob[:, 0] < 1-i)
-		print(sklearn_logreg_targets)
 		sklearn_logreg_targets_inv = np.where(sklearn_logreg_targets | 1, sklearn_logreg_targets^1, sklearn_logreg_targets)
 		y_test_inv = np.where(y_test | 1, y_test^1, y_test)
-		# print(sklearn_logreg_targets_inv)
-		# print(y_test_inv)
-		# print(1 * (sklearn_logreg_targets == y_test))
 		sklearn_logreg_p = sum(sklearn_logreg_targets_inv * y_test_inv) / len(np.where(sklearn_logreg_targets == 0)[0])
 		sklearn_logreg_r = sum(sklearn_logreg_targets_inv * y_test_inv)  / len(np.where(y_test == 0)[0])
 		sklearn_logreg_f1 = (2 * sklearn_logreg_p * sklearn_logreg_r) / (sklearn_logreg_p + sklearn_logreg_r)
@@ -162,35 +190,10 @@ def main():
 		print("precision: ", sklearn_logreg_p)
 		print("recall: ", sklearn_logreg_r)
 		print("f1 score: ", sklearn_logreg_f1)
+		sklearn_logreg_misclass = np.bitwise_xor(sklearn_logreg_targets, y_test)
+		print("The test error (misclassification rate) is:", sum(sklearn_logreg_misclass) / len(y_test))
 		# print(sklearn_logreg_prob)
 		print("")
-
-	# # Implementation of logistic regression provided in scikit-learn
-	# # Create LogisticRegression object and fit to training data
-	# print("\nLogistic Regression is implemented using the implementation provided in scikit-learn")
-	# clf = LogisticRegression().fit(X_train, y_train)
-	# # Predict using logistic regression model on test set
-	# sklearn_logreg_targets = clf.predict(X_test)
-	# sklearn_logreg_prob = clf.predict_proba(X_test)
-	# # print(sklearn_logreg_prob)
-	# # print(sklearn_logreg_prob[:, 1])
-	# # Calculate precision, recall and F1 score
-	# sklearn_logreg_targets_inv = np.where(sklearn_logreg_targets | 1, sklearn_logreg_targets^1, sklearn_logreg_targets)
-	# y_test_inv = np.where(y_test | 1, y_test^1, y_test)
-	# print(sklearn_logreg_targets)
-	# print(y_test)
-	# print(sklearn_logreg_targets * y_test)
-	# sklearn_logreg_p = sum(sklearn_logreg_targets * y_test) / sum(sklearn_logreg_targets)
-	# sklearn_logreg_r = sum(sklearn_logreg_targets * y_test)  / sum(y_test)
-	# sklearn_logreg_f1 = (2 * sklearn_logreg_p * sklearn_logreg_r) / (sklearn_logreg_p + sklearn_logreg_r)
-	# print("The precision, recall, and F1 score were calculated to be:")
-	# print("precision: ", sklearn_logreg_p)
-	# print("recall: ", sklearn_logreg_r)
-	# print("f1 score: ", sklearn_logreg_f1)
-	# # print(sklearn_logreg_prob)
-	# print("")
-
-
 
 	# Own implementation of k-nearest neighbour classifier calculation to get best k
 	print("Implement of k-nearest neighbour is implemented after finding best k for k = 1-5 using 5-fold cross-validation")
@@ -198,9 +201,17 @@ def main():
 	print("The best k was found to be", k_neigh)
 	# Get test predictors for with k-nearest neighbour classifier for best k
 	kneigh_pred = kneighbour_pred(X_test, X_train, y_train, k_neigh)
+	kneigh_pred = np.array(kneigh_pred)
 	# Calculate misclassification rate
 	kneigh_misclass = np.bitwise_xor(kneigh_pred, y_test)
 	print("The test error (misclassification rate) with k =", k_neigh, "is: ", sum(kneigh_misclass) / len(y_test))
+	# Calculate F1 score
+	kneigh_pred_inv = np.where(kneigh_pred | 1, kneigh_pred^1, kneigh_pred)
+	y_test_inv = np.where(y_test | 1, y_test^1, y_test)
+	kneigh_p = sum(kneigh_pred_inv * y_test_inv) / len(np.where(kneigh_pred_inv == 0)[0])
+	kneigh_r = sum(kneigh_pred_inv * y_test_inv)  / len(np.where(y_test == 0)[0])
+	kneigh_f1 = (2 * kneigh_p * kneigh_r) / (kneigh_p + kneigh_r)
+	print("The F1 score is:", kneigh_f1)
 	print("")
 
 	# Implementation of k-nearest neighbour classifier provided in scikit-learn
@@ -213,6 +224,14 @@ def main():
 	# Calculate misclassification rate
 	sklearn_kneigh_misclass = np.bitwise_xor(sklearn_kneigh_targets, y_test)
 	print("The test error (misclassification rate) with k =", scikit_learn_k, "is: ", sum(sklearn_kneigh_misclass) / len(y_test))
+	# Calculate F1 score
+	sklearn_kneigh_targets_inv = np.where(sklearn_kneigh_targets | 1, sklearn_kneigh_targets^1, sklearn_kneigh_targets)
+	y_test_inv = np.where(y_test | 1, y_test^1, y_test)
+	kneigh_scikit_p = sum(sklearn_kneigh_targets_inv * y_test_inv) / len(np.where(sklearn_kneigh_targets_inv == 0)[0])
+	kneigh_scikit_r = sum(sklearn_kneigh_targets_inv * y_test_inv)  / len(np.where(y_test == 0)[0])
+	kneigh_scikit_f1 = (2 * kneigh_scikit_p * kneigh_scikit_r) / (kneigh_scikit_p + kneigh_scikit_r)
+	print("The F1 score is:", kneigh_scikit_f1)
+	print("")
 	
 	
 

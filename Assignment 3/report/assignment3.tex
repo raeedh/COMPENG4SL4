@@ -1,0 +1,186 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{./../figures/}}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat = newest}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{lstautogobble}
+%\usepackage[framed, numbered]{matlab-prettifier}
+\lstset{inputpath=../../code,frame=single,breaklines=true,numbers=left}
+
+\titleformat*{\section}{\large\bfseries}
+%\allowdisplaybreaks
+
+% remove vertical spacing above top figure
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+%
+
+\title{COMPENG 4SL4 Assignment 3 Report}
+\author{
+    Raeed Hassan \\
+    hassam41 \\
+    400188200
+    %L02
+}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\section*{Data Set Loading and Splitting}
+The data set was loaded using \texttt{sklearn.datasets.load\_breast\_cancer} and split into a training set (containing 80\% of the data sample points), and a test set (containing the other 20\% of the data sample points). The \texttt{sklearn.model\_selection.train\_test\_split} function was used to perform the split, using the last 4 numbers of my student ID (8200) as the random state for the function.
+
+\section*{K-Fold Cross-Validation Setup}
+For K-fold cross-validation in this lab, the value of $K$ was set to 5. Arrays containing the training and test indexes for each fold were created using \texttt{sklearn.model\_selection.KFold}. These indices are used for all K-Fold cross-validation done throughout the lab. These indices are used for row indexing to generate the feature and target matrices before doing regression.
+
+\section*{Feature Normalization}
+Feature normalization was performed using the scikit-learn StandardScaler code provided in the lab. The training and test feature data sets were both normalized prior to doing any training, and the same normalized training and test sets are used for all models.
+
+\section*{Logistic Regression}
+Logistic regression was implemented with a logistic regression classifier. The probabilities for the positive class are were calculated.
+
+The thresholds used for the probability of the positive class (malignant) were between 0.05--0.95 with 0.05 increments, with the precision, recall and F1 score calculated at each threshold. The PR curve can be seen in Figure~\ref{fig:logreg}. The test error (misclassification error) for each threshold was also calculated. The best performing thresholds (in terms of best F1 score and lowest test score) were when the threshold was between 0.45 and 0.05.
+
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Precision/Recall Curve},
+		width = \textwidth,
+		%height = 150,
+		xmin = 0.7, xmax = 1.02, max space between ticks=50pt,
+		ymin = 0.3, ymax = 0.6,
+		ylabel = Precision, xlabel = Recall,
+		% xticklabel style={
+		% /pgf/number format/fixed,
+		% /pgf/number format/precision=2
+		% },
+		% scaled x ticks=false,
+		% legend pos = north east,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	\addplot [mark=o, color=blue] table [y=precision, x=recall] {./data/logreg.dat};
+	\end{axis}
+\end{tikzpicture}
+\caption{Precision/Recall Curve for Logistic Regression}
+\label{fig:logreg}
+\end{figure}
+
+
+\section*{Logistic Regression with scikit-learn}
+Logistic regression was performed using the \texttt{LogisticRegression} classifier implemented in \texttt{sklearn.linear\_model}. A logistic regression classifier and created and fit to the training data. The probabilities for each class are obtained using the \texttt{predict\_proba} function.
+
+The same thresholds as the previous part are used to compute the precision and recall with the training data (0.05--0.95 with 0.05 increments), with the precision, recall and F1 score calculated at each threshold. The PR curve can be seen in Figure~\ref{fig:logreg_scikit}. The test error (misclassification error) for each threshold was also calculated. The best performing thresholds (in terms of best F1 score and lowest test score) were when the threshold was between 0.45 and 0.55.
+
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Precision/Recall Curve},
+		width = \textwidth,
+		%height = 150,
+		xmin = 0.7, xmax = 1.02, max space between ticks=50pt,
+		ymin = 0.7, ymax = 1.02,
+		ylabel = Precision, xlabel = Recall,
+		% xticklabel style={
+		% /pgf/number format/fixed,
+		% /pgf/number format/precision=2
+		% },
+		% scaled x ticks=false,
+		% legend pos = north east,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	\addplot [mark=o, color=blue] table [y=precision, x=recall] {./data/logreg_scikit.dat};
+	\end{axis}
+\end{tikzpicture}
+\caption{Precision/Recall Curve for scikit-learn Logistic Regression}
+\label{fig:logreg_scikit}
+\end{figure}
+
+\clearpage
+\section*{$k$-Nearest Neighbour Classifier with $K$-fold cross-validation}
+$k$-Nearest neighbour classifier for each $k = 1,2,3,4,5$ were implemented with $K$-fold cross-validation. The $K$-fold cross-validation with $K = 5$ was implemented using the scikit-learn function \texttt{sklearn.model\_selection.KFold} which provides the training and test indices for each fold. The cross-validation error (misclassification error) for each $k$ was calculated, and $k = 3$ was determined to be the best $k$ as it produced the lowest misclassification error. The cross-validation errors are shown in Table~\ref{tab:kneigh}. The test error (misclassification error) with $k = 3$ was found to be 0.05263157894736842.
+
+There are two situations where ties might occur. When two or more training examples are at the same distance from the current example, the first $n$ training examples that appear in the matrix within the $k$-nearest neighbour cutoff. When half of the neighbours are each split between the classes twos, we resolve the tie by predicting malignant, as a malignant case predicted as  benign is a worse outcome than predicting a benign case as malignant.
+
+\begin{table}[htp]
+\centering
+\caption{Cross-Validation Error for $k$ = 1--5 for $k$-Nearest Neighbour Classifier}\label{tab:kneigh}
+\begin{tabular}{|l|l|l|l|}
+	\hline
+	$k$	& Cross-Validation Error	\\ \hline\hline
+	1  	& 0.04835164835164835		\\ \hline
+	2  	& 0.039560439560439566		\\ \hline
+	3  	& 0.03296703296703297		\\ \hline
+	4  	& 0.03736263736263736		\\ \hline
+	5  	& 0.035164835164835165		\\ \hline
+\end{tabular}
+\end{table}
+
+\section*{$k$-Nearest Neighbour Classifier with scikit-learn with $K$-fold cross-validation}
+$k$-Nearest neighbour classifier for each $k = 1,2,3,4,5$ were implemented with $K$-fold cross-validation and \texttt{sklearn.neighbors.KNeighborsClassifier} from scikit-learn. Tie-handling is also handled by scikit-learn's implementation. The $K$-fold cross-validation with $K = 5$ was implemented in the same way as the previous part. The cross-validation error (misclassification error) for each $k$ was calculated, and $k = 3$ was determined to be the best $k$ as it produced the lowest misclassification error. The cross-validation errors are shown in Table~\ref{tab:kneigh_scikit}. The test error (misclassification error) with $k = 3$ was found to be 0.05263157894736842. The cross-validation errors for all $k$ and test error with best $k$ were all found to be the same as our own implementation of the $k$-nearest neighbour classifier.
+
+\begin{table}[htp]
+\centering
+\caption{Cross-Validation Error for $k$ = 1--5 for $k$-Nearest Neighbour Classifier}\label{tab:kneigh_scikit}
+\begin{tabular}{|l|l|l|l|}
+	\hline
+	$k$	& Cross-Validation Error	\\ \hline\hline
+	1  	& 0.04835164835164835		\\ \hline
+	2  	& 0.039560439560439566		\\ \hline
+	3  	& 0.03296703296703297		\\ \hline
+	4  	& 0.03736263736263736		\\ \hline
+	5  	& 0.035164835164835165		\\ \hline
+\end{tabular}
+\end{table}
+
+\section*{$k$-Nearest Neighbour Classifier Comparison}
+The two implementations of the $k$-nearest neighbour classifier had identical performance with the Wisconsin breast cancer data set. The predictions between the two models are identical, and the cross-validation errors and test errors in both cases are also identical.
+
+\section*{Best Model}
+For logistic regression, the cases where the threshold is 0.5 is used for comparison. The misclassification rates and F1 scores are shown in Table~\ref{tab:err}.
+
+The misclassification rates and F1 scores are identical between both $k$-nearest neighbour models.
+
+\begin{table}[htp]
+\centering
+\caption{Metric Scores for All Models}\label{tab:err}
+\begin{tabular}{|l|l|l|}
+	\hline
+	Model	& Misclassification Error	& F1 score \\ \hline\hline
+	Logistic Regression						& 0.008771929824561403	& 0.5739130434782609		\\ \hline
+	Logistic Regression (scikit-learn)		& 0.008771929824561403	& 0.9850746268656716	\\ \hline
+	$k$-Nearest Neighbour					& 0.05263157894736842	& 0.5172413793103449	\\ \hline
+	$k$-Nearest Neighbour (scikit-learn)	& 0.05263157894736842	& 0.5172413793103449	\\ \hline
+\end{tabular}
+\end{table}
+
+% \input{plots/error.tex}
+
+\end{document}
