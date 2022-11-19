@@ -123,6 +123,9 @@ The same thresholds as the previous part are used to compute the precision and r
 \label{fig:logreg_scikit}
 \end{figure}
 
+\section*{Logistic Regression Comparison}
+The two models produced similar misclassification rates and recall, the precision with my own model was significantly worse, leading to a significantly worse F1 score.
+
 \clearpage
 \section*{$k$-Nearest Neighbour Classifier with $K$-fold cross-validation}
 $k$-Nearest neighbour classifier for each $k = 1,2,3,4,5$ were implemented with $K$-fold cross-validation. The $K$-fold cross-validation with $K = 5$ was implemented using the scikit-learn function \texttt{sklearn.model\_selection.KFold} which provides the training and test indices for each fold. The cross-validation error (misclassification error) for each $k$ was calculated, and $k = 3$ was determined to be the best $k$ as it produced the lowest misclassification error. The cross-validation errors are shown in Table~\ref{tab:kneigh}. The test error (misclassification error) with $k = 3$ was found to be 0.05263157894736842.
@@ -164,16 +167,16 @@ $k$-Nearest neighbour classifier for each $k = 1,2,3,4,5$ were implemented with 
 The two implementations of the $k$-nearest neighbour classifier had identical performance with the Wisconsin breast cancer data set. The predictions between the two models are identical, and the cross-validation errors and test errors in both cases are also identical.
 
 \section*{Best Model}
-For logistic regression, the cases where the threshold is 0.5 is used for comparison. The misclassification rates and F1 scores are shown in Table~\ref{tab:err}.
+For logistic regression, the cases where the threshold is 0.5 is used for comparison. The misclassification rates and F1 scores are shown in Table~\ref{tab:err}. The best model is the logistic regression implementation by scikit-learn, which produces the lowest F1 score and misclassification error.
 
-The misclassification rates and F1 scores are identical between both $k$-nearest neighbour models.
+The misclassification rates between both logistic regression models is the same, but the F1 score with my own implementation is significantly lower. The misclassification rates and F1 scores are identical between both $k$-nearest neighbour models. In both cases, the there is no winner with the misclassification rate as a metric as both comparisons have the same misclassification rates between the models. Similar, with $k$-nearest neighbour models there is no winner for F1 scores as they have the same misclassification rate. However, with logistic regression, the scikit-learn model significantly wins with a much higher F1 score than all other models.
 
 \begin{table}[htp]
 \centering
 \caption{Metric Scores for All Models}\label{tab:err}
 \begin{tabular}{|l|l|l|}
 	\hline
-	Model	& Misclassification Error	& F1 score \\ \hline\hline
+	Model	& Misclassification Rate	& F1 score \\ \hline\hline
 	Logistic Regression						& 0.008771929824561403	& 0.5739130434782609		\\ \hline
 	Logistic Regression (scikit-learn)		& 0.008771929824561403	& 0.9850746268656716	\\ \hline
 	$k$-Nearest Neighbour					& 0.05263157894736842	& 0.5172413793103449	\\ \hline
