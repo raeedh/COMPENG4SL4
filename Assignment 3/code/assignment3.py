@@ -26,7 +26,7 @@ def load_data(train_split, split_seed):
 
 	return X_train, X_test, y_train, y_test
 
-def batch_gradient_logreg(x, t, seed, alpha = 0.001, iterations = 100000):
+def batch_gradient_logreg(x, t, seed, alpha = 0.01, iterations = 10000):
 	"""
 	x = x data from set
 	y = target data from set
