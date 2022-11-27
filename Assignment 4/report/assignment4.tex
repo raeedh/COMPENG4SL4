@@ -151,6 +151,15 @@ The test errors versus the number of predictors for all three Adaboost scenarios
 \end{figure}
 
 \section*{Ensemble Comparison}
-The test errors versus $n$ number of predictors for all 5 ensemble methods are plotted in Figure~\ref{fig:ensemble}. 
+The test errors versus $n$ number of predictors for all 5 ensemble methods are plotted in Figure~\ref{fig:ensemble}. We can observe that all ensemble methods outperformed the single decision tree classifier. The Adaboost classifiers with a maximum of 10 leaves performed the best (least test error) at every number of predictors. The performance of the ensemble methods can be ordered as (from best to worse):
+\begin{enumerate}
+	\item Adaboost (max 10 leaves)
+	\item Adaboost (no restrictions)
+	\item Random Forest
+	\item Bagging
+	\item Adaboost (decision stumps)
+\end{enumerate}
+
+This performance ranking is maintained for most $n$ number of predictors, with the test errors for any ensemble method crossing another's test error at most twice. The performance is very similar (generally less than 0.05 difference in test error) between the 2nd and 3rd best methods, and the 4th and 5th best methods. The classifiers can be roughly split into three groups that are about 0.01 test error apart (1st best, 2nd and 3rd best, 4th and 5th best).
 
 \end{document}
