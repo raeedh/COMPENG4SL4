@@ -1,0 +1,156 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{./../figures/}}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat = newest}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{lstautogobble}
+\usetikzlibrary{intersections} 
+%\usepackage[framed, numbered]{matlab-prettifier}
+\lstset{inputpath=../../code,frame=single,breaklines=true,numbers=left}
+
+\titleformat*{\section}{\large\bfseries}
+%\allowdisplaybreaks
+
+% remove vertical spacing above top figure
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+%
+
+\title{COMPENG 4SL4 Assignment 4 Report}
+\author{
+    Raeed Hassan \\
+    hassam41 \\
+    400188200
+    %L02
+}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\section*{Data Set Loading and Splitting}
+The data set was saved and loaded using \texttt{dataset = pd.read\_csv('Data/spambase.data', header=None)} and split into a training set (containing two thirds of the data sample points), and a test set (containing the other third of the data sample points). The training and test data sets were split using the \texttt{sklearn.model\_selection.train\_test\_split} function, using the last 4 numbers of my student ID (8200) as the random state for the function.
+
+\section*{K-Fold Cross-Validation Setup}
+For K-fold cross-validation in this lab, the value of $K$ was set to 5. Arrays containing the training and test indexes for each fold were created using \texttt{sklearn.model\_selection.KFold}. These indices are used for all K-Fold cross-validation done throughout the lab. These indices are used for row indexing to generate the feature and target matrices before doing regression.
+
+% \section*{Feature Normalization}
+% Feature normalization was performed using the scikit-learn StandardScaler code provided in the lab. The training and test feature data sets were both normalized prior to doing any training, and the same normalized training and test sets are used for all models.
+
+\section*{Decision Tree Classifier}
+The decision tree classifier was implemented with \texttt{sklearn.tree.DecisionTreeClassifier}. The cross-validation error with 5-fold cross-validation was calculated for 2 to 400 maximum number of leaves, and the best $n$ maximum number of leaves (least cross-validation error) was selected.
+
+The cross-validation error versus the maximum number of leaves is plotted in Figure~\ref{fig:cross_valid}. The model producing the least cross-validation error was with 100 maximum number of leaves, with a cross-validation error of 0.0839546191247974 and a test error of 0.0901909150757077.
+
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Cross-Validation Error vs. Maximum Number of Leaves},
+		width = \textwidth,
+		%height = 150,
+		xmin = 2, xmax = 400,
+		ymin = 0, ymax = 0.3,
+		ylabel = Cross-Validation Error, xlabel = Maximum Number of Leaves,
+		yticklabel style={
+		/pgf/number format/fixed,
+		/pgf/number format/precision=2
+		},
+		% scaled x ticks=false,
+		% legend pos = north east,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+	\addplot table [y=cross_valid_err, x=max_leaves] {./data/cross_valid.dat};
+	\end{axis}
+\end{tikzpicture}
+\caption{Cross-Validation Error versus Maximum Number of Leaves}
+\label{fig:cross_valid}
+\end{figure}
+
+\section*{Bagging Classifier}
+The bagging classifier was implemented with \texttt{sklearn.ensemble.BaggingClassifier}. The test error for bagging classifiers with $n$ predictors for $n =$ 50 to 2500 (in increments of 50) was calculated.
+
+The test error versus the number of predictors is plotted in Figure~\ref{fig:ensemble}. The ensemble producing the least test error was with $n = 700$ predictors in the ensemble, with a test error of 0.05924950625411455.
+
+\section*{Random Forest Classifier}
+The random forest classifier was implemented with the \texttt{RandomForestClassifier} classifier from \texttt{sklearn.ensemble}. The test error for random forest classifiers with $n$ predictors for $n =$ 50 to 2500 (in increments of 50) was calculated.
+
+The test error versus the number of predictors is plotted in Figure~\ref{fig:ensemble}. The ensemble producing the least test error was with $n = 1950, 2200-2500$ predictors in the ensemble, with a test error of 0.05200789993416721.
+
+\section*{Adaboost}
+The Adaboost classifiers were implemented with \texttt{sklearn.ensemble.AdaBoostClassifier}. The test error for Adaboost classifiers with $n$ predictors for $n =$ 50 to 2500 (in increments of 50) was calculated. This was performed for decision trees with decision stumps (max\_depth = 1), decision trees with at most 10 leaves (max\_leaf\_nodes = 10), and decision trees with no restriction on depth or node number.
+
+The test errors versus the number of predictors for all three Adaboost scenarios are plotted in Figure~\ref{fig:ensemble}. The ensemble producing the least test error with decision stumps was with $n = 400$ predictors in the ensemble, with a test error of 0.05924950625411455. The ensemble producing the least test error with a maximum of 10 leaves was with $n = 750, 1250$ predictors in the ensemble, with a test error of 0.03620803159973667. The ensemble producing the least test error with no restriction on depth or node number was with $n = 100-400, 500$ predictors in the ensemble, with a test error of 0.05069124423963134.
+
+\begin{figure}[htp]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		title = {Test Errors vs. Number of Predictors},
+		width = \textwidth,
+		%height = 150,
+		xmin = 50, xmax = 2500,
+		ymin = 0, ymax = 0.1,
+		ylabel = Test Error, xlabel = Number of Predictors,
+		yticklabel style={
+		/pgf/number format/fixed,
+		/pgf/number format/precision=2
+		},
+		scaled x ticks=false,
+		legend pos = north east,
+		% some code for adding points
+		%nodes near coords={%
+		%\footnotesize
+		%$(\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/x}},
+		%\pgfmathprintnumber
+		%{\pgfkeysvalueof{/data point/y}})$%
+		%},
+	]
+
+	\addplot +[mark=none, green, name path=A] coordinates {(50, 0.0901909150757077) (2500, 0.0901909150757077)}; \addlegendentry{Decision Tree}
+
+	\addplot table [y=test_error, x=n] {./data/bagging.dat};
+	\addlegendentry{Bagging}
+
+	\addplot table [y=test_error, x=n] {./data/random_forest.dat};
+	\addlegendentry{Random Forest}
+
+	\addplot table [y=test_error, x=n] {./data/ada_stump.dat};
+	\addlegendentry{Adaboost (decision stumps)}
+
+	\addplot table [y=test_error, x=n] {./data/ada_10.dat};
+	\addlegendentry{Adaboost (max 10 leaves)}
+
+	\addplot table [y=test_error, x=n] {./data/ada_no_restrict.dat};
+	\addlegendentry{Adaboost (no restrictions)}
+
+	\end{axis}
+\end{tikzpicture}
+\caption{Test Errors versus Number of Predictors for Multiple Ensemble Methods}
+\label{fig:ensemble}
+\end{figure}
+
+\section*{Ensemble Comparison}
+The test errors versus $n$ number of predictors for all 5 ensemble methods are plotted in Figure~\ref{fig:ensemble}. 
+
+\end{document}
